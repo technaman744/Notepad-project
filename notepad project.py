@@ -3,20 +3,25 @@ import tkinter
 import os
 from tkinter import *
 from tkinter.messagebox import *
-from tkinter.filedialog import *
+from tkinter import ttk, colorchooser, filedialog
+import PIL
+from PIL import ImageGrab
 
 #create a class
 class Notepad:
     root = Tk()
-
+    
     # default window width and height
     __thisWidth = 300
     __thisHeight = 300
-    __thisTextArea = Text(root)
+    __thisTextArea = Text(root,bg='#293542',fg="white",font="helvetica")
     __thisMenuBar = Menu(root)
     __thisFileMenu = Menu(__thisMenuBar, tearoff=0)
     __thisEditMenu = Menu(__thisMenuBar, tearoff=0)
     __thisHelpMenu = Menu(__thisMenuBar, tearoff=0)
+    __thisColorMenu = Menu(__thisMenuBar, tearoff=0)
+    fm = Frame(root, width=300, height=200, bg="blue")
+
 
     # To add scrollbar
     __thisScrollBar = Scrollbar(__thisTextArea)
@@ -24,6 +29,7 @@ class Notepad:
 
     def __init__(self, **kwargs):
 
+        self.color_fg = 'black'
         # Set icon
         try:
             self.root.wm_iconbitmap("Notepad.ico")
@@ -102,6 +108,8 @@ class Notepad:
         self.__thisMenuBar.add_cascade(label="Edit",
                                        menu=self.__thisEditMenu)
 
+        self.__thisMenuBar.add_command(label="Colour", command=self.change_fg)
+
         # To create a feature of description of the notepad
         self.__thisHelpMenu.add_command(label="About Notepad",
                                         command=self.__showAbout)
@@ -122,7 +130,7 @@ class Notepad:
     # exit()
 
     def __showAbout(self):
-        showinfo("Notepad", "Naman Kumar")
+        showinfo("Notepad", "This notepad is developed by Naman Kumar")
 
     def __openFile(self):
 
@@ -187,6 +195,10 @@ class Notepad:
 
     def __paste(self):
         self.__thisTextArea.event_generate("<<Paste>>")
+        
+    def change_fg(self):
+        self.color_fg=colorchooser.askcolor(color=self.color_fg)[1]
+
 
     def run(self):
 
@@ -196,5 +208,5 @@ class Notepad:
     # Run main application
 
 
-notepad = Notepad(width=600, height=400)
+notepad = Notepad(width=600, height=400,fg='black')
 notepad.run()
